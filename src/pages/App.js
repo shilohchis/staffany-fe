@@ -59,18 +59,15 @@ const App = () => {
 
     const submitData = e => {
         e.preventDefault();
-        validate();
-        if(show) {
-            let ttl = total;
-            const startTime = moment(`${date} ${start}`);
-            const endTime = moment(`${date} ${end}`);
-            const diff = Math.ceil( endTime.diff(startTime, 'hours') );
-            if(diff > overtimeLimit) {
-                ttl += (diff - overtimeLimit) * overtimePay;
-            }
-            ttl += (pay * overtimeLimit);
-            setTotal(ttl);
+        let ttl = total;
+        const startTime = moment(`${date} ${start}`);
+        const endTime = moment(`${date} ${end}`);
+        const diff = Math.ceil( endTime.diff(startTime, 'hours') );
+        if(diff > overtimeLimit) {
+            ttl += (diff - overtimeLimit) * overtimePay;
         }
+        ttl += (pay * overtimeLimit);
+        setTotal(ttl);
     };
 
     return (

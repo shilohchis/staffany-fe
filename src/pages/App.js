@@ -22,40 +22,55 @@ const App = () => {
 
     const validate = () => {
         const reg = {
-            number: '^[1-9][0-9]+$',
+            number: '^[1-9][0-9]{2,}$',
             time: '^[0-2][0-9]{2}$',
         };
+        let start = '',
+            end = '',
+            pay = '',
+            overtime = '',
+            overtimePay = '';
         const regexNumber = new RegExp(reg.number);
         const regexTime = new RegExp(reg.time);
+
         if(!regexNumber.test(pay)) {
-            setErrors({ ...errors, pay: 'Input must be number' })
+            pay = 'Input must be number';
         }
         if(!regexNumber.test(overtimePay)) {
-            setErrors({ ...errors, overtimePay: 'Input must be number' })
+            overtimePay = 'Input must be number'
         }
         if(!regexNumber.test(overtimeLimit)) {
-            setErrors({ ...errors, overtime: 'Input must be number' })
+            overtime = 'Input must be number';
         }
         if(!regexTime.test(start)) {
-            setErrors({ ...errors, start: 'Invalid time input' })
+            start = 'Invalid time input';
         }
         if(!regexTime.test(end)) {
-            setErrors({ ...errors, start: 'Invalid time input' })
+            end = 'Invalid time input';
         }
+        setErrors({ ...errors, start, end, pay, overtime, overtimePay });
+        const keys = Object.keys(errors);
+        keys.forEach(item => {
+            if(!errors[item]) {
+                setShow(false);
+            }
+        });
     };
 
     const submitData = e => {
-        validate();
-        let ttl = total;
         e.preventDefault();
-        const startTime = moment(`${date} ${start}`);
-        const endTime = moment(`${date} ${end}`);
-        const diff = Math.ceil( endTime.diff(startTime, 'hours') );
-        if(diff > overtimeLimit) {
-            ttl += (diff - overtimeLimit) * overtimePay;
+        validate();
+        if(show) {
+            let ttl = total;
+            const startTime = moment(`${date} ${start}`);
+            const endTime = moment(`${date} ${end}`);
+            const diff = Math.ceil( endTime.diff(startTime, 'hours') );
+            if(diff > overtimeLimit) {
+                ttl += (diff - overtimeLimit) * overtimePay;
+            }
+            ttl += (pay * overtimeLimit);
+            setTotal(ttl);
         }
-        ttl += (pay * overtimeLimit);
-        setTotal(ttl);
     };
 
     return (
@@ -93,7 +108,7 @@ const App = () => {
                     show
                     ? <div>
                         <label>Total Pay</label>
-                        <input value={total} readonly/>
+                        <input value={total} readOnly/>
                     </div>
                     : null
                 }

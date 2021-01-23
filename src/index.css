@@ -1,0 +1,20 @@
+.flash {
+    font-size: 20px;
+    background: lightgrey;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.flash-success {
+    border: solid 5px green;
+    color: green;
+}
+
+.flash-error {
+    border: solid 5px red;
+    color: red;
+}
+
+.hide {
+    display: none;
+}
